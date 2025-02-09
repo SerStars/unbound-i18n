@@ -1,0 +1,41 @@
+name: Sync with Crowdin
+
+on:
+    push:
+        branches:
+            - "main"
+        paths:
+            - "source/en-US.json"
+            - ".github/workflows/sync.yml"
+    workflow_dispatch:
+
+jobs:
+    crowdin-sync:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            
+            - name: Sync from Crowdin
+              uses: crowdin/github-action@v2.5.2
+              with:
+                config: crowdin.yml
+                upload_sources: true
+                upload_translations: true
+                download_translations: true
+                push_translations: true
+                create_pull_request: false
+                localization_branch_name: crowdin
+                commit_message: "Sync Translations from Crowdin"
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+                CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+            # https://github.com/bunny-mod/i18n/blob/a4b22a0529322fe8289e7c808d82e18dd98ac08d/.github/workflows/crowdin.yml#L37
+            - name: Merge
+              run: |
+                sudo chmod -R ugo+rwX .
+                git checkout main
+                git add *
+                git merge crowdin
+                git push

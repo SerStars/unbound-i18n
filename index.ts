@@ -1,8 +1,9 @@
 // Resolved in the bundle
-import esES from '@i18n/es-ES.json';
-import enUS from '@i18n/en-US.json';
-import enGB from '@i18n/en-GB.json';
-import deDE from '@i18n/de-DE.json';
+import esES from '@i18n/translations/es-ES.json';
+import enGB from '@i18n/translations/en-GB.json';
+import deDE from '@i18n/translations/de-DE.json';
+import enUS from '@i18n/source/en-US.json';
+
 
 export default {
 	'en-US': enUS,
